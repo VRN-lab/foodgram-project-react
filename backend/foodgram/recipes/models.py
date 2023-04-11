@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 from users.models import User
 
@@ -62,13 +63,17 @@ class Recipe(models.Model):
         auto_now_add=True
     )
     cooking_time = models.PositiveIntegerField(
-        'Время приготовления (в минутах)'
+        ('Время приготовления (в минутах)'),
+        validators=[MinValueValidator(
+            limit_value=1,
+            message=('Значение должно быть более 1')
+        )]
     )
 
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
-        ordering = ['-pub_date']
+        ordering = ('-pub_date',)
 
     def __str__(self):
         return self.name
@@ -89,7 +94,13 @@ class RecipeIngredient(models.Model):
         verbose_name='Ингредиент',
         on_delete=models.CASCADE
     )
-    amount = models.PositiveIntegerField('Количество')
+    amount = models.PositiveIntegerField(
+        ('Количество'),
+        validators=[MinValueValidator(
+            limit_value=1,
+            message=('Значение должно быть более 1')
+        )]
+    )
 
     class Meta:
         verbose_name = 'Ингредиент рецепта'
@@ -98,35 +109,6 @@ class RecipeIngredient(models.Model):
     def __str__(self):
         return (f'{self.ingredient.name} - {self.amount}'
                 f' {self.ingredient.measurement_unit}')
-
-
-class Subscribe(models.Model):
-    """Создает модель Подписки"""
-    user = models.ForeignKey(
-        User,
-        verbose_name='Подписчик',
-        on_delete=models.CASCADE,
-        related_name='follower'
-    )
-    author = models.ForeignKey(
-        User,
-        verbose_name='Автор',
-        on_delete=models.CASCADE,
-        related_name='following'
-    )
-
-    class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'author'],
-                name='unique_subscription'
-            )
-        ]
-
-    def __str__(self):
-        return f'{self.user} подписан на {self.author}'
 
 
 class Favorite(models.Model):

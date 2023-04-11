@@ -1,17 +1,17 @@
 import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
-# from pathlib import Path
-
-
-# BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'django-insecure-f-^(hsw6@7b8kb*brb^af8jc75#7ip&y*jcx@h86**vnco2n2m'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 
-DEBUG = True
+DEBUG = False
+
 
 ALLOWED_HOSTS = ['*']
+
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,7 +43,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'foodgram.urls'
+
 
 TEMPLATES = [
     {

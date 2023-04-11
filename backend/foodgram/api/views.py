@@ -7,13 +7,14 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .constants import OBJECTS_ON_THE_PAGE
 from users.models import User
-
 from .filters import RecipeFilter, SearchFilter
 from recipes.models import (
     Favorite, Ingredient, Recipe,
-    ShoppingList, Subscribe, Tag
+    ShoppingList, Tag
 )
+from users.models import Subscribe
 from .paginators import PageNumberPaginatorModified
 from .permissions import AuthorOrReadOnly
 from .serializers import (
@@ -100,7 +101,7 @@ class SubscribeViewSet(APIView):
     def get(self, request, author_id=None):
         user_obj = User.objects.filter(following__user=request.user)
         paginator = PageNumberPagination()
-        paginator.page_size = 10
+        paginator.page_size = OBJECTS_ON_THE_PAGE
         result_page = paginator.paginate_queryset(user_obj, request)
         serializer = SubscribersSerializer(
             result_page, many=True, context={'current_user': request.user})
