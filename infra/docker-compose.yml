@@ -9,7 +9,7 @@ services:
       - ./.env
   
   backend:
-    image: viktor888/foodgram:latest
+    image: viktor888/backend_foodgram:latest
     restart: always
     depends_on:
       - db
@@ -20,6 +20,7 @@ services:
       - ./.env
 
   frontend:
+    image: viktor888/frontend_foodgram:latest
     build:
       context: ../frontend
       dockerfile: Dockerfile
