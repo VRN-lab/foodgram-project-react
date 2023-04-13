@@ -93,7 +93,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                     recipe=recipe,
                     ingredient=obj,
                     amount=amount
-                    )]
+                )]
             )
 
     def create(self, validated_data):

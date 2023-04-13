@@ -97,6 +97,7 @@ class SubscribeViewSet(APIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
+        return None
 
     def get(self, request, author_id=None):
         user_obj = User.objects.filter(following__user=request.user)
