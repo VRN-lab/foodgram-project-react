@@ -65,6 +65,10 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend_foodgram
             sudo docker-compose stop
             sudo docker-compose rm backend
+            sudo docker-compose exec -T backend python manage.py makemigrations users
+            sudo docker-compose exec -T backend python manage.py makemigrations recipes
+            sudo docker-compose exec -T backend python manage.py makemigrations api
+            sudo docker-compose exec -T backend python manage.py migrate
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
