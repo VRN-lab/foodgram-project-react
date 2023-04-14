@@ -69,7 +69,9 @@ jobs:
             sudo docker-compose exec -T backend python manage.py makemigrations recipes
             sudo docker-compose exec -T backend python manage.py makemigrations api
             sudo docker-compose exec -T backend python manage.py migrate
+            sudo rm .env
             touch .env
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
