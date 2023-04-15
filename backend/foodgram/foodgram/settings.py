@@ -4,12 +4,21 @@ import dj_database_url
 
 from dotenv import load_dotenv
 
+from decouple import Csv, config
+
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 SECRET_KEY = os.getenv('SECRET_KEY')
+
+
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='http://localhost, https://127.0.0.1, http://51.250.26.112',
+    cast=Csv()
+)
 
 
 DEBUG = False
@@ -70,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['https://*.example.com']
 
 DATABASES = {
     'default': {
