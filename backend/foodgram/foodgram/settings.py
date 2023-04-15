@@ -70,6 +70,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
+CSRF_TRUSTED_ORIGINS = ['http://51.250.26.112', 'http://...']
 
 DATABASES = {
     'default': {
