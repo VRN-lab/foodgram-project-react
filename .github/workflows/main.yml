@@ -65,10 +65,6 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend_foodgram
             sudo docker-compose stop
             sudo docker-compose rm backend
-            sudo docker-compose exec -T backend python manage.py makemigrations users
-            sudo docker-compose exec -T backend python manage.py makemigrations recipes
-            sudo docker-compose exec -T backend python manage.py makemigrations api
-            sudo docker-compose exec -T backend python manage.py migrate
             sudo rm .env
             touch .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
