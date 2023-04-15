@@ -6,7 +6,7 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - .env
   
   backend:
     image: viktor888/backend_foodgram:latest
@@ -17,7 +17,7 @@ services:
       - static_value:/app/static/
       - media_value:/app/media/
     env_file:
-      - ./.env
+      - .env
 
   frontend:
     image: viktor888/frontend_foodgram:latest
