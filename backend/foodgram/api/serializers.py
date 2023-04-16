@@ -1,4 +1,3 @@
-from django.db.models import F
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -105,16 +104,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             **validated_data
         )
         recipe.tags.set(tags)
-        for ingredient in ingredients:
-            obj = get_object_or_404(Ingredient, id=ingredient['id'])
-            amount = ingredient['amount']
-            if RecipeIngredient.objects.filter(
-                recipe=recipe,
-                ingredient=obj
-            ).exists():
-                amount += F('amount')
-            ingredients = self.initial_data.get('ingredients')
-            self.create_ingredient(recipe, ingredients)
+        ingredients = self.initial_data.get('ingredients')
+        self.create_ingredient(recipe, ingredients)
 
         return recipe
 
@@ -128,25 +119,17 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                         'Количество ингредиента не может быть меньше 1'
                     )
             instance.ingredients.clear()
-            for ingredient in ingredients:
-                obj = get_object_or_404(Ingredient,
-                                        id=ingredient['id'])
-                amount = ingredient['amount']
-                if RecipeIngredient.objects.filter(
-                    recipe=instance,
-                    ingredient=obj
-                ).exists():
-                    amount += F('amount')
-                ingredients = self.initial_data.get('ingredients')
-                self.create_ingredient(instance, ingredients)
+            ingredients = self.initial_data.get('ingredients')
+            self.create_ingredient(instance, ingredients)
         if 'tags' in self.initial_data:
             tags = validated_data.pop('tags')
             instance.tags.set(tags)
 
         instance.name = validated_data.get('name', instance.name)
         instance.text = validated_data.get('text', instance.text)
-        instance.cooking_time = validated_data.get('cooking_time',
-                                                   instance.cooking_time)
+        instance.cooking_time = validated_data.get(
+            'cooking_time', instance.cooking_time
+        )
         instance.image = validated_data.get('image', instance.image)
         instance.save()
 
