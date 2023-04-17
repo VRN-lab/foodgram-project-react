@@ -4,5 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 def validate_alpha(value):
-    if not re.match("^[a-zA-Zа-яА-Я]+$", value):
-        raise ValidationError('Название должно состоять из букв')
+    if re.match('^[\W\d]+$', value):
+        raise ValidationError(
+            'Название не должно состоять из какаих либо символов без букв'
+        )
