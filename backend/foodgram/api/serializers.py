@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -91,7 +92,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 [RecipeIngredient(
                     recipe=recipe,
                     ingredient=obj,
-                    amount=amount
+                    amount=amount,
                 )]
             )
 
@@ -141,6 +142,24 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             instance,
             context={'request': self.context.get('request')}
         ).data
+
+    def validate(self, data):
+        ingredients = self.initial_data.get('ingredients')
+        ingredients_list = {}
+        for ingredient in ingredients:
+            if ingredient.get('id') in ingredients_list:
+                raise ValidationError(
+                    ('Ингредиенты не должны повторяться')
+                )
+            if int(ingredient.get('amount')) <= 0:
+                raise ValidationError(
+                    ('Ингредиенты должны быть объемом/весом больше 0')
+                )
+            ingredients_list[ingredient.get('id')] = (
+                ingredients_list.get('amount')
+            )
+
+        return data
 
 
 class RecipeListSerializer(serializers.ModelSerializer):

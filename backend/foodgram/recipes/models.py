@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 from users.models import User
+from api.validator import validate_alpha
 
 
 class Tag(models.Model):
@@ -39,7 +40,9 @@ class Recipe(models.Model):
         on_delete=models.CASCADE,
         related_name='recipes'
     )
-    name = models.CharField('Название', max_length=200)
+    name = models.CharField(
+        'Название', max_length=200, validators=[validate_alpha]
+    )
     text = models.TextField('Описание рецепта')
     tags = models.ManyToManyField(
         Tag,
